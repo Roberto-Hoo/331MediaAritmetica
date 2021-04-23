@@ -38,7 +38,7 @@ gsl_vector *my_soma;
 gsl_vector *soma;
 size_t n; // O tamanho do vetor v no receptor
 double num;
-
+double SomaTotal;
 /*
  * Retorna um número aleatorio inteiro entre minimo e o maximo(inclusive os extremos)
  */
@@ -64,11 +64,13 @@ int main() {
     printf("Vetor my_v(%d) = (", world_rank);
     srand((unsigned) (world_rank + time(0))); //para gerar números aleatórios reais.
     gsl_vector_set(my_soma,0,0.0);
+    double SomaParcial[1]={0.0};
     for (int i = 0; i < my_n; i++) {
         num = (double) numeroAleatorio(0, 10) +
               (double) numeroAleatorio(0, 0) / 100;
         gsl_vector_set(my_v, i, num);
         gsl_vector_set(my_soma,0,gsl_vector_get(my_soma,0)+num);
+        SomaParcial[0] += num;
         printf("%6.1f", gsl_vector_get(my_v, i));
     }
     printf(")\n");
@@ -93,6 +95,34 @@ int main() {
             printf("%4.1f ", gsl_vector_get(v, i));
         printf("\n");
     }
+
+    /*
+     * O vetor v do processo 0 recebe 5 números dos vetores my_v de cada processo emissor
+     * inclusive de si próprio e imprime o vetor v final.
+     */
+    MPI_Gather(my_soma->data, 1, MPI_DOUBLE, soma->data, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    if (world_rank == 0) {
+        SomaTotal=0.0;
+        for (int i = 0; i < world_size; i++)
+            SomaTotal += gsl_vector_get(soma, i);
+        printf("A soma total eh %7.1f\n",SomaTotal);
+    }
+
+    /*
+     * O vetor v do processo 0 recebe 5 números dos vetores my_v de cada processo emissor
+     * inclusive de si próprio e imprime o vetor v final.
+     */
+
+    double RecebeSomaParcial[world_size];
+
+    MPI_Gather(SomaParcial, 1, MPI_DOUBLE, RecebeSomaParcial, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    if (world_rank == 0) {
+        SomaTotal=0.0;
+        for (int i = 0; i < world_size; i++)
+            SomaTotal += gsl_vector_get(soma, i);
+        printf("A soma total eh %7.1f\n",SomaTotal);
+    }
+
 
     // Finaliza o MPI
     MPI_Finalize();
