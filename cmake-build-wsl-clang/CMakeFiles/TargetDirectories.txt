@@ -1,0 +1,3 @@
+/mnt/s/Programacao/CParalelaUfrgs2020_2/E331MediaAritmetica/cmake-build-wsl-clang/CMakeFiles/rebuild_cache.dir
+/mnt/s/Programacao/CParalelaUfrgs2020_2/E331MediaAritmetica/cmake-build-wsl-clang/CMakeFiles/edit_cache.dir
+/mnt/s/Programacao/CParalelaUfrgs2020_2/E331MediaAritmetica/cmake-build-wsl-clang/CMakeFiles/331MediaAritmetica.dir
