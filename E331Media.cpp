@@ -21,16 +21,21 @@ int MPI_Gather(
 Sua sintaxe é parecida com a da rotina MPI_Scatter. Veja lá!
  Aqui, root é o identificador rank do processo receptor.
 */
-
-#include <stdio.h>
+#include <iostream>
+#include <cstdio>
 #include <mpi.h> // API MPI
 #include <gsl/gsl_vector.h> //gsl
 
+using namespace std;
+
 int world_size; // número total de processos
 int world_rank; // ID (rank) do processo
-const size_t my_n = 5; // O tamanho dos vetores  emissores
+int my_n = 3;   // O tamanho dos vetores  emissores
+
 gsl_vector *my_v; // Os vetores emissores
-gsl_vector *v; // O vetor v no receptor
+gsl_vector *v;    // O vetor v no receptor
+gsl_vector *my_soma;
+gsl_vector *soma;
 size_t n; // O tamanho do vetor v no receptor
 double num;
 
@@ -41,8 +46,7 @@ int numeroAleatorio(int minimo, int maximo) {
     return minimo + rand() % (maximo - minimo + 1);
 }
 
-int main(void) {
-
+int main() {
 
     MPI_Init(NULL, NULL); // Inicializa o MPI
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
@@ -56,19 +60,26 @@ int main(void) {
      *
     */
     my_v = gsl_vector_alloc(my_n); //cada processo tem o seu my_v
+    my_soma = gsl_vector_alloc(1); //cada processo tem o seu my_soma
     printf("Vetor my_v(%d) = (", world_rank);
-    for (size_t i = 0; i < my_n; i++) {
-        num = (double) numeroAleatorio(0, 99) +
-              (double) numeroAleatorio(0, 99) / 100;
-        gsl_vector_set(my_v, i, 5 * world_rank + i + 1);
+    srand((unsigned) (world_rank + time(0))); //para gerar números aleatórios reais.
+    gsl_vector_set(my_soma,0,0.0);
+    for (int i = 0; i < my_n; i++) {
+        num = (double) numeroAleatorio(0, 10) +
+              (double) numeroAleatorio(0, 0) / 100;
+        gsl_vector_set(my_v, i, num);
+        gsl_vector_set(my_soma,0,gsl_vector_get(my_soma,0)+num);
         printf("%6.1f", gsl_vector_get(my_v, i));
     }
     printf(")\n");
+    printf("A soma do vetor %d eh %6.1f\n",world_rank,gsl_vector_get(my_soma,0));
 
     n = world_size * my_n; // total de números(espaços alocados) em todos os processos
     v = gsl_vector_alloc(0);
+    soma = gsl_vector_alloc(0);
     if (world_rank == 0) {
         v = gsl_vector_alloc(n); // aloca o vetor v no processo 0 com n espaços
+        soma = gsl_vector_alloc(world_size);
     }
 
     /*
