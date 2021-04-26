@@ -1,4 +1,4 @@
-/mnt/s/Programacao/CParalelaUfrgs2020_2/cmake-3.20.1-linux-x86_64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /mnt/s/Programacao/CParalelaUfrgs2020_2/E331MediaAritmetica
+"C:\Program Files\JetBrains\CLion 2021.1\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=C:/msys64/mingw64/bin/clang.exe -DCMAKE_CXX_COMPILER=C:/msys64/mingw64/bin/clang++.exe -G "CodeBlocks - MinGW Makefiles" S:\Programacao\CParalelaUfrgs2020_2\E331MediaAritmetica
 -- Configuring done
 -- Generating done
--- Build files have been written to: /mnt/s/Programacao/CParalelaUfrgs2020_2/E331MediaAritmetica/cmake-build-wsl-clang
+-- Build files have been written to: S:/Programacao/CParalelaUfrgs2020_2/E331MediaAritmetica/cmake-build-wsl-clang

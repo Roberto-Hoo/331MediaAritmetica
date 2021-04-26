@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(331MediaAritmetica)
+project(E331MediaAritmetica)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Werror")
 # MPI
@@ -11,7 +11,7 @@ SET(CMAKE_CXX_COMPILER mpic++)
 set(SOURCE_FILES E331Media.cpp)
 add_executable(${CMAKE_PROJECT_NAME} E331Media.cpp)
 # Inclusão do GNU-GSL
-target_link_libraries(331MediaAritmetica -lgsl -lgslcblas -lm)
+target_link_libraries(E331MediaAritmetica -lgsl -lgslcblas -lm)
 
 # Rode com mpic++ E311.cpp -o E311
 # depois mpirun -np 4 E311

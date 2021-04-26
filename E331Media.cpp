@@ -85,7 +85,7 @@ int main() {
     }
 
     /*
-     * O vetor v do processo 0 recebe 5 números dos vetores my_v de cada processo emissor
+     * O vetor v do processo 0 recebe "my_n" números dos vetores my_v de cada processo emissor
      * inclusive de si próprio e imprime o vetor v final.
      */
     MPI_Gather(my_v->data, my_n, MPI_DOUBLE, v->data, my_n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -113,14 +113,13 @@ int main() {
      * inclusive de si próprio e imprime o vetor v final.
      */
 
-    double RecebeSomaParcial[world_size];
-
+    double RecebeSomaParcial[world_size]; // Pequeno erro, todos os processos criam RecebeSomaParcial
     MPI_Gather(SomaParcial, 1, MPI_DOUBLE, RecebeSomaParcial, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     if (world_rank == 0) {
         SomaTotal=0.0;
         for (int i = 0; i < world_size; i++)
-            SomaTotal += gsl_vector_get(soma, i);
-        printf("A soma total eh %7.1f\n",SomaTotal);
+            SomaTotal += RecebeSomaParcial[i];
+        printf("A soma total eh %7.1f e a media aritmetica eh %7.1f\n",SomaTotal,SomaTotal/n);
     }
 
 
@@ -130,9 +129,12 @@ int main() {
     return 0;
 }
 /*
- * Rode no terminal
+ * No Linux ou no WSL Rode no terminal
  * $ mpic++ 334gather.cpp -lgsl -lgslcblas -o 334gather
  * $ mpirun -np 6 -oversubscribe 334gather
  * Processo 0 soma = 15.000000
  *
+ * No Windows
+ * $ mpic++ E331Media.cpp -o E331Media.exe -lgsl -lgslcblas
+ * $ mpiexec -n 5 E331Media.exe
  * */
